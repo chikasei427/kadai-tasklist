@@ -1,7 +1,21 @@
-<h1>タスク一覧</h1>
-<ul>
-<% @tasks.each do |task| %>
-    <li><%= link_to task.id, task %> : <%= task.status %> &gt;<%= task.content %></li>
+<% if logged_in? %>
+  <h1>タスク一覧</h1>
+  <p>ログイン完了ユーザ: <%= current_user.name %></p>
+    <ul>
+        <% @tasks.each do |task| %>
+            <li><%= link_to task.id, task %> : <%= task.status %> &gt;<%= task.content %>
+            <% if current_user == task.user %>
+            <%= link_to "Delete", task, method: :delete, data: { confirm: "You sure?" }, class: 'btn btn-danger btn-sm' %>
+            <% end %>
+            </li>
+        <% end %>
+    </ul>
+    <%= link_to '新規メッセージの投稿', new_task_path, class: "btn btn-primary" %>
+<% else %>
+  <div class="center jumbotron">
+    <div class="text-center">
+      <%= link_to 'Sign up now!', signup_path, class: 'btn btn-lg btn-primary' %>
+    </div>
+  </div>
 <% end %>
-</ul>
-<%= link_to '新規タスクの投稿', new_task_path %>
+
